@@ -58,7 +58,7 @@ void Server::listen() {
 
     cout << "Waiting for client" << endl;
 
-    int new_socket_fd = accept(listen_socket_fd, (struct sockaddr *) &client_addr, &client_addr_size_bytes);
+    int socket_fd = accept(listen_socket_fd, (struct sockaddr *) &client_addr, &client_addr_size_bytes);
 
     cout << "Client connected" << endl;
 
@@ -67,7 +67,7 @@ void Server::listen() {
     char buffer[buffer_size];
 
     memset(buffer, 0, buffer_size);
-    int bytes_read = read(new_socket_fd, buffer, buffer_size - 1);
+    int bytes_read = read(socket_fd, buffer, buffer_size - 1);
 
     if (bytes_read == 0) {
         cout << "Connection Ended" << endl;

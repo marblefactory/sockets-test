@@ -41,7 +41,7 @@ int main(void) {
     int bind_result = bind(socket_fd, (const struct sockaddr *)&server_addr, sizeof(server_addr));
 
     if (bind_result < 0) {
-        cout << "Failed to bind";
+        cout << "Failed to bind" << endl;
         return 0;
     }
 
@@ -73,12 +73,12 @@ int main(void) {
         int bytes_read = read(new_socket_fd, buffer, buffer_size - 1);
 
         if (bytes_read == 0) {
-            cout << "Connection Ended";
+            cout << "Connection Ended" << endl;
             return 0;
         }
 
         if (bytes_read < 0) {
-            cout << "Error reading from socket";
+            cout << "Error reading from socket" << endl;
             return 0;
         }
 

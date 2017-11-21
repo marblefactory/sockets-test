@@ -1,6 +1,32 @@
 import socket
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((socket.gethostbyname('localhost'), 1024))
+class Connect(object):
+    sock: socket
 
-s.send('Hello, world'.encode())
+    def connect(self):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print('Connecting to server')
+        sock.connect(('127.0.0.1', 1024))
+        return sock
+
+    def send(self, message: str):
+        sock = self.connect()
+        recv_data = ""
+        data = True
+
+        print('sending: ' + message)
+        sock.sendall(message.encode())
+
+        while data:
+            data = sock.recv(1024)
+            recv_data += data
+            print('received: ' + data)
+
+        sock.close()
+        return recv_data
+
+
+connect = Connect()
+
+connect.send("Hello World")
+connect.send("Another message")

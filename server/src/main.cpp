@@ -58,7 +58,11 @@ int main(void) {
     // the accept system call)
     socklen_t client_addr_size_bytes;
 
+    cout << "Waiting for client" << endl;
+
     int new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_addr, &client_addr_size_bytes);
+
+    cout << "Client connected" << endl;
 
     // Read data from the client.
     size_t buffer_size = 256;
@@ -68,12 +72,17 @@ int main(void) {
         memset(buffer, 0, buffer_size);
         int bytes_read = read(new_socket_fd, buffer, buffer_size - 1);
 
+        if (bytes_read == 0) {
+            cout << "Connection Ended";
+            return 0;
+        }
+
         if (bytes_read < 0) {
             cout << "Error reading from socket";
             return 0;
         }
 
-        cout << buffer << endl;
+        cout << "Read: " << buffer << endl;
     }
 
     return 0;

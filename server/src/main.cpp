@@ -45,41 +45,40 @@ int main(void) {
         return 0;
     }
 
-    // Allow the process to listen on the socket for connections.
-    // The second argument is the backlog queue, i.e. the number of connections
-    // that can be waiting while the process is handling a particular connection.
-    // This is set to 0 since we only want 1 client.
-    listen(socket_fd, 0);
-
-    // Wait (block) for a client to connect. After this, communicating with the
-    // client is done with the new socket file descriptor.
-    sockaddr_in client_addr;
-    // The size (in bytes) of the address of the client (this is required for
-    // the accept system call)
-    socklen_t client_addr_size_bytes;
-
-    cout << "Waiting for client" << endl;
-
-    int new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_addr, &client_addr_size_bytes);
-
-    cout << "Client connected" << endl;
-
-    // Read data from the client.
-    size_t buffer_size = 256;
-    char buffer[buffer_size];
-
     while (1) {
+        // Allow the process to listen on the socket for connections.
+        // The second argument is the backlog queue, i.e. the number of connections
+        // that can be waiting while the process is handling a particular connection.
+        listen(socket_fd, 5);
+
+        // Wait (block) for a client to connect. After this, communicating with the
+        // client is done with the new socket file descriptor.
+        sockaddr_in client_addr;
+        // The size (in bytes) of the address of the client (this is required for
+        // the accept system call)
+        socklen_t client_addr_size_bytes;
+
+        cout << "Waiting for client" << endl;
+
+        int new_socket_fd = accept(socket_fd, (struct sockaddr *) &client_addr, &client_addr_size_bytes);
+
+        cout << "Client connected" << endl;
+
+        // Read data from the client.
+        size_t buffer_size = 256;
+        char buffer[buffer_size];
+
         memset(buffer, 0, buffer_size);
         int bytes_read = read(new_socket_fd, buffer, buffer_size - 1);
 
         if (bytes_read == 0) {
             cout << "Connection Ended" << endl;
-            return 0;
+            continue;
         }
 
         if (bytes_read < 0) {
             cout << "Error reading from socket" << endl;
-            return 0;
+            continue;
         }
 
         cout << "Read: " << buffer << endl;

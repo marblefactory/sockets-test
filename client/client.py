@@ -17,13 +17,7 @@ class Connect(object):
         print('sending: ' + message)
         sock.sendall(message.encode())
 
-        while data:
-            data = sock.recv(1024)
-            recv_data += data
-            print('received: ' + data)
-
         sock.close()
-        return recv_data
 
 
 connect = Connect()

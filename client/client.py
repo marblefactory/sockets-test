@@ -1,5 +1,6 @@
 import socket
 
+
 class Connect(object):
     sock: socket
 
@@ -11,8 +12,6 @@ class Connect(object):
 
     def send(self, message: str):
         sock = self.connect()
-        recv_data = ""
-        data = True
 
         print('sending: ' + message)
         sock.sendall(message.encode())

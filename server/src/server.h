@@ -11,6 +11,7 @@ public:
     // Create a server using the port number on which the server accepts
     // connections.
     Server(int port_num);
+    ~Server();
 
     // Sets-up a socket to listen for clients.
     void setup();

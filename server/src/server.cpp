@@ -29,6 +29,10 @@ Server::Server(int port_num): listen_socket_fd(socket(AF_INET, SOCK_STREAM, 0)) 
     server_addr.sin_addr.s_addr = INADDR_ANY;
 }
 
+Server::~Server() {
+    close(listen_socket_fd);
+}
+
 // Sets-up a socket to listen for clients.
 void Server::setup() {
     // Bind the socket to an address. This can fail, for example, if the socket
@@ -49,15 +53,16 @@ void Server::setup() {
 
 // Listen for messages from clients.
 void Server::listen() {
-    // Wait (block) for a client to connect. After this, communicating with the
-    // client is done with the new socket file descriptor.
     sockaddr_in client_addr;
+
     // The size (in bytes) of the address of the client (this is required for
-    // the accept system call)
+    // the accept system call).
     socklen_t client_addr_size_bytes;
 
     cout << "Waiting for client" << endl;
 
+    // Wait (block) for a client to connect. After this, communicating with the
+    // client is done with the new socket file descriptor.
     int socket_fd = accept(listen_socket_fd, (struct sockaddr *) &client_addr, &client_addr_size_bytes);
 
     cout << "Client connected" << endl;
@@ -69,15 +74,12 @@ void Server::listen() {
     memset(buffer, 0, buffer_size);
     int bytes_read = read(socket_fd, buffer, buffer_size - 1);
 
-    if (bytes_read == 0) {
-        cout << "Connection Ended" << endl;
-        return;
-    }
-
     if (bytes_read < 0) {
         cout << "Error reading from socket" << endl;
         return;
     }
 
     cout << "Read: " << buffer << endl;
+
+    close(socket_fd);
 }
